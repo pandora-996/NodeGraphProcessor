@@ -49,6 +49,12 @@ namespace GraphProcessor
 
             // Remove parameter in the name of the type if it exists
             name = name.Replace("Parameter", "");
+            
+            LabelTextAttribute[] attrs = type.GetCustomAttributes(typeof(LabelTextAttribute), false) as LabelTextAttribute[];
+            if (attrs != null && attrs.Length > 0)
+            {
+                name = attrs[0].text;
+            }
 
             return ObjectNames.NicifyVariableName(name);
         }

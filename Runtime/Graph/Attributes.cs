@@ -243,4 +243,16 @@ namespace GraphProcessor
 
 	[AttributeUsage(AttributeTargets.Method)]
 	public class IsCompatibleWithGraph : Attribute {}
+
+	[AttributeUsage(AttributeTargets.Class)]
+	public class LabelTextAttribute : Attribute
+	{
+		public string	text;
+
+		public LabelTextAttribute(string text)
+		{
+			this.text = text;
+		}
+	}
+
 }
