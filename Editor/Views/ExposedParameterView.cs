@@ -31,21 +31,45 @@ namespace GraphProcessor
         {
             var parameterType = new GenericMenu();
 
+            Dictionary<string, Type> name2ParamType = new(); 
             foreach (var paramType in GetExposedParameterTypes())
-                parameterType.AddItem(new GUIContent(GetNiceNameFromType(paramType)), false, () =>
+            {
+                string niceName = GetNiceNameFromType(paramType);
+                if (name2ParamType.ContainsKey(niceName))
                 {
-                    string uniqueName = "New " + GetNiceNameFromType(paramType);
+                    niceName += "(DuplicateName)";
+                }
+                name2ParamType[niceName] =  paramType;
+            }
+
+            List<string> nameList = name2ParamType.Keys.ToList();
+            nameList.Sort();
+            
+            foreach (var key in nameList)
+            {
+                string niceName = key;
+                Type paramType = name2ParamType[key]; 
+                parameterType.AddItem(new GUIContent(niceName), false, () =>
+                {
+                    string uniqueName = "New " + niceName;
 
                     uniqueName = GetUniqueExposedPropertyName(uniqueName);
                     graphView.graph.AddExposedParameter(uniqueName, paramType);
                 });
-
+            }
+            
             parameterType.ShowAsContext();
         }
 
         protected string GetNiceNameFromType(Type type)
         {
             string name = type.Name;
+            
+            ExposedParameter instance = Activator.CreateInstance(type) as ExposedParameter;
+            if (instance != null)
+            {
+                name = instance.GetValueType().Name;
+            }
 
             // Remove parameter in the name of the type if it exists
             name = name.Replace("Parameter", "");

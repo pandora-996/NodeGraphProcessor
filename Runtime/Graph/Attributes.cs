@@ -244,7 +244,7 @@ namespace GraphProcessor
 	[AttributeUsage(AttributeTargets.Method)]
 	public class IsCompatibleWithGraph : Attribute {}
 
-	[AttributeUsage(AttributeTargets.Class)]
+	[AttributeUsage(AttributeTargets.All, AllowMultiple = false, Inherited = true)]
 	public class LabelTextAttribute : Attribute
 	{
 		public string	text;
