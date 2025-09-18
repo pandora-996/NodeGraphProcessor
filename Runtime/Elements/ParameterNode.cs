@@ -105,9 +105,20 @@ namespace GraphProcessor
 			}
 
 			if (accessor == ParameterAccessor.Get)
+			{
+				object outputValue = parameter.value;
+				if (outputValue == null)
+				{
+					Func<ExposedParameter, object> func = graph.GetParameterValue<Func<ExposedParameter, object>>("ExposedParameterDefaultValueFunc");
+					parameter.value = func?.Invoke(parameter);
+				}
+				
 				output = parameter.value;
+			}
 			else
+			{
 				graph.UpdateExposedParameter(parameter.guid, input);
+			}
 		}
 	}
 

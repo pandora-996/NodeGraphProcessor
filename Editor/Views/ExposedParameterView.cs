@@ -137,6 +137,13 @@ namespace GraphProcessor
 
             UpdateParameterList();
 
+            header.Add(new Button(() =>
+            {
+                graphView.graph.SortExposedParameter();
+            }){
+                text = "排序"
+            });
+            
             // Add exposed parameter button
             header.Add(new Button(OnAddClicked){
                 text = "+"

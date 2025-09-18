@@ -605,6 +605,15 @@ namespace GraphProcessor
 				onExposedParameterListChanged?.Invoke();
 		}
 
+		public void SortExposedParameter()
+		{
+			exposedParameters.Sort((a, b) =>
+			{
+				return a.name.CompareTo(b.name);
+			});
+			onExposedParameterListChanged?.Invoke();
+		}
+
 		internal void NotifyExposedParameterListChanged()
 			=> onExposedParameterListChanged?.Invoke();
 
@@ -688,6 +697,15 @@ namespace GraphProcessor
 			e.value = value;
 
 			return true;
+		}
+
+		public void SetOrAddParameterValue(string key, object value, Type exposedParameterType)
+		{
+			bool isSuc = SetParameterValue(key, value);
+			if (!isSuc)
+			{
+				AddExposedParameter(key, exposedParameterType, value);
+			}
 		}
 
 		/// <summary>
