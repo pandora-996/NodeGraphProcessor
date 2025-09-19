@@ -923,6 +923,11 @@ namespace GraphProcessor
 			{
 				if (e is BaseNodeView v && this.Contains(v) && v.nodeTarget.needsInspector)
 					selectedNodeViews.Add(v);
+
+				if (e is BaseNodeView nodeView)
+				{
+					nodeView.OnMouseUp();
+				}
 			}
 
 			nodeInspector.UpdateSelectedNodes(selectedNodeViews);

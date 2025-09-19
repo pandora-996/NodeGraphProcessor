@@ -1112,6 +1112,8 @@ namespace GraphProcessor
 
 		public virtual new bool RefreshPorts()
 		{
+			SortEdgesWithPos();
+			
 			// If a port behavior was attached to one port, then
 			// the port count might have been updated by the node
 			// so we have to refresh the list of port views.
@@ -1159,6 +1161,53 @@ namespace GraphProcessor
 			nodeTarget.UpdateAllPorts();
 
 			RefreshPorts();
+		}
+
+		public void OnMouseUp()
+		{
+			bool isNeedUpdateOrder = false;
+			
+			foreach (var nodePort in nodeTarget.inputPorts)
+			{
+				foreach (var edge in nodePort.GetEdges())
+				{
+					if (edge.outputPort.GetEdges().Count > 1)
+					{
+						edge.outputPort.SortEdgesWithPos();
+						isNeedUpdateOrder = true;
+					}
+				}
+			}
+            
+			foreach (var nodePort in nodeTarget.outputPorts)
+			{
+				foreach (var edge in nodePort.GetEdges())
+				{
+					if (edge.inputPort.GetEdges().Count > 1)
+					{
+						edge.inputPort.SortEdgesWithPos();
+						isNeedUpdateOrder = true;
+					}
+				}
+			}
+
+			if (isNeedUpdateOrder)
+			{
+				owner.UpdateComputeOrder();	
+			}
+		}
+		
+		private void SortEdgesWithPos()
+		{
+			foreach (var nodePort in nodeTarget.inputPorts)
+			{
+				nodePort.SortEdgesWithPos();
+			}
+            
+			foreach (var nodePort in nodeTarget.outputPorts)
+			{
+				nodePort.SortEdgesWithPos();
+			}
 		}
 
 		void UpdatePortsForField(string fieldName)

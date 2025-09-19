@@ -242,6 +242,28 @@ namespace GraphProcessor
 			edges.Remove(edge);
 		}
 
+		public void SortEdgesWithPos()
+		{
+			if (edges.Count <= 1)
+			{
+				return;
+			}
+			
+			if (portData.vertical)
+			{
+				// 入口在顶部，出口在底部
+				edges = edges.OrderBy(e => e.outputNode.position.x)
+					.ThenBy(e => e.outputNode.position.y)
+					.ToList();
+			}
+			else
+			{
+				edges = edges.OrderBy(e => e.outputNode.position.y)
+					.ThenBy(e => e.outputNode.position.x)
+					.ToList();	
+			}
+		}
+
 		/// <summary>
 		/// Get all the edges connected to this port
 		/// </summary>
