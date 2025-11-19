@@ -19,3 +19,9 @@
 ## [2.0.3] - 2025-09-19
 ### Added
 - 1、节点按坐标排序 NodePort SortEdgesWithPos
+
+## [2.0.4] - 2025-11-19
+### Changed
+- 1、节点按坐标排序 NodePort SortEdgesWithPos
+- 2、ToolbarView Center改名Reset
+- 3、ToolbarView Center改为定位到所有节点中心

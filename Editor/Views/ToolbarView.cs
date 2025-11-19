@@ -164,7 +164,8 @@ namespace GraphProcessor
 
 		protected virtual void AddButtons()
 		{
-			AddButton("Center", graphView.ResetPositionAndZoom);
+			AddButton("Reset", graphView.ResetPositionAndZoom);
+			AddCenterButton();
 
 			bool processorVisible = graphView.GetPinnedElementStatus< ProcessorView >() != Status.Hidden;
 			showProcessor = AddToggle("Show Processor", processorVisible, (v) => graphView.ToggleView< ProcessorView>());
@@ -172,6 +173,49 @@ namespace GraphProcessor
 			showParameters = AddToggle("Show Parameters", exposedParamsVisible, (v) => graphView.ToggleView< ExposedParameterView>());
 
 			AddButton("Show In Project", () => EditorGUIUtility.PingObject(graphView.graph), false);
+		}
+
+		protected virtual void AddCenterButton()
+		{
+			AddButton("Center", () => { Vector2 horizontal = Vector2.zero;
+				Vector2 vertical = Vector2.zero;
+				foreach (var nodeView in graphView.nodeViews)
+				{
+					Rect rect = nodeView.GetPosition();
+					float minX = rect.x;
+					float maxX = rect.x + rect.width;
+					float minY = rect.y;
+					float maxY = rect.y + rect.height;
+					if (minX < horizontal.x || horizontal.x == 0)
+					{
+						horizontal.x = minX;
+					}
+
+					if (maxX > horizontal.y || horizontal.y == 0)
+					{
+						horizontal.y = maxX;
+					}
+
+					if (minY < vertical.x || vertical.x == 0)
+					{
+						vertical.x = minY;
+					}
+
+					if (maxY > vertical.y || vertical.y == 0)
+					{
+						vertical.y = maxY;
+					}
+				}
+
+				Vector2 size = new Vector2(horizontal.y - horizontal.x, vertical.y - vertical.x);
+				float newX = graphView.window.position.width / 2 - (horizontal.x + size.x / 2f);
+				float newY = graphView.window.position.height / 2 - (vertical.x + size.y / 2);
+				graphView.graph.position = new Vector3(newX, newY, 0);
+				// graph.scale = Vector3.one * Mathf.Min(position.width / size.x, position.height / size.y); // 缩放后 坐标不对
+				graphView.graph.scale = Vector3.one;
+				graphView.UpdateViewTransform(graphView.graph.position, graphView.graph.scale);
+				
+			}, left: true);
 		}
 
 		public virtual void UpdateButtonStatus()

@@ -28,6 +28,8 @@ namespace GraphProcessor
 		/// </summary>
 		public BaseGraph							graph;
 
+		public EditorWindow window;
+
 		/// <summary>
 		/// Connector listener that will create the edges between ports
 		/// </summary>
@@ -137,6 +139,7 @@ namespace GraphProcessor
 
 		public BaseGraphView(EditorWindow window)
 		{
+			this.window = window;
 			serializeGraphElements = SerializeGraphElementsCallback;
 			canPasteSerializedData = CanPasteSerializedDataCallback;
 			unserializeAndPaste = UnserializeAndPasteCallback;

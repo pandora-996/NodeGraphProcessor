@@ -248,19 +248,37 @@ namespace GraphProcessor
 			{
 				return;
 			}
-			
-			if (portData.vertical)
+
+			bool isIn = edges[0].inputNode == owner;
+			if (portData.vertical) // 入口在顶部，出口在底部
 			{
-				// 入口在顶部，出口在底部
-				edges = edges.OrderBy(e => e.outputNode.position.x)
-					.ThenBy(e => e.outputNode.position.y)
-					.ToList();
+				if (isIn)
+				{
+					edges = edges.OrderBy(e => e.outputNode.position.x)
+						.ThenBy(e => e.outputNode.position.y)
+						.ToList();	
+				}
+				else
+				{
+					edges = edges.OrderBy(e => e.inputNode.position.x)
+						.ThenBy(e => e.inputNode.position.y)
+						.ToList();	
+				}
 			}
 			else
 			{
-				edges = edges.OrderBy(e => e.outputNode.position.y)
-					.ThenBy(e => e.outputNode.position.x)
-					.ToList();	
+				if (isIn)
+				{
+					edges = edges.OrderBy(e => e.outputNode.position.y)
+						.ThenBy(e => e.outputNode.position.x)
+						.ToList();	
+				}
+				else
+				{
+					edges = edges.OrderBy(e => e.inputNode.position.y)
+						.ThenBy(e => e.inputNode.position.x)
+						.ToList();
+				}
 			}
 		}
 
